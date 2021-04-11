@@ -10,17 +10,17 @@ $MinDays = 1
 $Path = "C:\Temp\PBIAdmin\ssbi\"
 
 #When using "SPN" as $AuthMode, make sure these variables are filled in correctly, to authenticate unattended
-#$TenantID = 'InsertTenantGUIDHere' #GUID for the current tenant
-#$ApplicationID = 'InserApplicationGUIDHere' #GUID for the App Registration Application ID
-#$Secret = 'InsertSecretHere' #Client Secret for the App Registration SPN
+$TenantID = 'InsertTenantGUIDHere' #GUID for the current tenant
+$ApplicationID = 'InserApplicationGUIDHere' #GUID for the App Registration Application ID
+$Secret = 'InsertSecretHere' #Client Secret for the App Registration SPN
 
 # Prepare variables for session connection. Needs to be replaced with Certificate authentication
-#$Password = ConvertTo-SecureString $Secret -AsPlainText -Force
-#$Credential = New-Object PSCredential $ApplicationID, $password
+$Password = ConvertTo-SecureString $Secret -AsPlainText -Force
+$Credential = New-Object PSCredential $ApplicationID, $password
 
 # Connect to Power BI with credential of Power BI Service Administrator / Service Principal
 # When using an SPN you have to provide the TenantID, as defaulting to MyOrg will not work
-# Connect-PowerBIServiceAccount -ServicePrincipal -Credential $Credential -Tenant $TenantID
+Connect-PowerBIServiceAccount -ServicePrincipal -Credential $Credential -Tenant $TenantID
 
 #When not using SPN, run this command to bring up the authentication dialog
 Connect-PowerBIServiceAccount

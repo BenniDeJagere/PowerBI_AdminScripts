@@ -48,6 +48,8 @@ function PrintPsLog() {
     }
 }
 
+PrintPsLog -LogStatus "INFO" -LogDescription "Finished declaring PSLog Function"
+
 #Check for import status on necessary modules
 $modules = @("MicrosoftPowerBIMGMT" , "DataGateway")
 
@@ -63,6 +65,8 @@ foreach ( $m in $modules )
         PrintPsLog -LogStatus "SUCCESS" -LogDescription "Module $m is now imported."
     }
 }
+
+PrintPsLog -LogStatus "INFO" -LogDescription "Finished checking for modules"
 
 #Establish Connection to Power BI
 if ($AuthMode -eq "SPN")
@@ -105,6 +109,8 @@ else
     PrintPsLog -LogStatus "ERROR" -LogDescription "Connection to PowerBI failed - Please provide SPN or Login as a parameter to the AuthMode parameter"
 }
 
+PrintPsLog -LogStatus "INFO" -LogDescription "Finished authentication logic"
+
 #MaxDays..MinDays, loops over as an array over every object
 $MaxDays..$MinDays |
 ForEach-Object {
@@ -114,6 +120,8 @@ ForEach-Object {
     $StartDate = (Get-Date -Date ($Date) -Format yyyy-MM-ddTHH:mm:ss)
     $EndDate = (Get-Date -Date ((($Date).AddDays(1)).AddMilliseconds(-1)) -Format yyyy-MM-ddTHH:mm:ss)
     
+    PrintPsLog -LogStatus "ACTION" -LogDescription "Collecting activities for $StartDate until $EndDate"
+
     #For sake of completeness the single line below could replace the entire process of calling the API, and looping over the continuationUri
     #$auditlogs = Get-PowerBIActivityEvent -StartDateTime $StartDate -EndDateTime $EndDate -ResultType JsonString | ConvertFrom-Json
     
@@ -153,6 +161,7 @@ ForEach-Object {
        PrintPsLog -LogStatus "ERROR" -LogDescription "No activities found in Activity Logs for $Date"
     }
 }
+PrintPsLog -LogStatus "INFO" -LogDescription "Finished collecting activities"
 
 #Disconnect PowerBI Service Account
 PrintPsLog -LogStatus "ACTION" -LogDescription "Disconnect Power BI Session"
